@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aroma Café · Comparte tu ubicación</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: #fbf7f2;
+      color: #2c1e14;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ---------- Cabecera ---------- */
+    .hero {
+      background: linear-gradient(135deg, #6b3e26 0%, #a0522d 100%);
+      color: #fff;
+      padding: 60px 24px 70px;
+      text-align: center;
+    }
+
+    .hero .logo {
+      font-size: 2.6rem;
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -.5px;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      opacity: .9;
+      font-size: 1rem;
+    }
+
+    /* ---------- Contenido ---------- */
+    .contenedor {
+      max-width: 640px;
+      margin: -40px auto 40px;
+      padding: 0 20px;
+    }
+
+    .tarjeta {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 10px 30px rgba(107, 62, 38, .12);
+      margin-bottom: 20px;
+    }
+
+    .tarjeta h2 {
+      font-size: 1.15rem;
+      margin-bottom: 14px;
+      color: #6b3e26;
+    }
+
+    /* ---------- Info del negocio ---------- */
+    .info-linea {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: .95rem;
+      color: #5a4636;
+      border-bottom: 1px dashed #eee2d5;
+    }
+    .info-linea:last-child { border-bottom: none; }
+    .info-linea .icono { font-size: 1.2rem; }
+
+    /* ---------- Botón principal ---------- */
+    #boton {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #6b3e26;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    #boton:hover { background: #4f2c19; }
+    #boton:active { transform: scale(.98); }
+    #boton:disabled {
+      background: #b9a294;
+      cursor: wait;
+    }
+
+    /* ---------- Mensajes ---------- */
+    #mensaje {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: .9rem;
+      display: none;
+      word-break: break-word;
+    }
+    #mensaje.ok {
+      display: block;
+      background: #e8f5ec;
+      color: #1e6b3a;
+      border: 1px solid #b8e0c5;
+    }
+    #mensaje.error {
+      display: block;
+      background: #fdeaea;
+      color: #a12626;
+      border: 1px solid #f5c2c2;
+    }
+    #mensaje.info {
+      display: block;
+      background: #fdf6e3;
+      color: #8a6d1f;
+      border: 1px solid #f0e0a8;
+    }
+
+    /* ---------- Resultado con datos ---------- */
+    #resultado {
+      margin-top: 18px;
+      display: none;
+    }
+    #resultado.visible { display: block; }
+
+    .coordenadas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .dato {
+      background: #fbf7f2;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+    .dato span {
+      display: block;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #9b8574;
+      margin-bottom: 4px;
+    }
+    .dato strong {
+      font-size: 1rem;
+      color: #2c1e14;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .acciones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .acciones a, .acciones button {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #e5d5c5;
+      background: #fff;
+      color: #6b3e26;
+      font-size: .9rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: inherit;
+    }
+    .acciones a:hover, .acciones button:hover {
+      background: #fbf7f2;
+    }
+
+    /* ---------- Pie ---------- */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: .8rem;
+      color: #9b8574;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="logo">☕</div>
+    <h1>Aroma Café</h1>
+    <p>Café de especialidad · Repostería artesanal</p>
+  </header>
+
+  <main class="contenedor">
+
+    <!-- Información del negocio -->
+    <section class="tarjeta">
+      <h2>Visítanos</h2>
+      <div class="info-linea">
+        <span class="icono">📍</span>
+        <span>Calle Mayor 42, Centro Histórico</span>
+      </div>
+      <div class="info-linea">
+        <span class="icono">🕒</span>
+        <span>Lun – Dom · 8:00 a 21:00</span>
+      </div>
+      <div class="info-linea">
+        <span class="icono">📞</span>
+        <span>+34 600 123 456</span>
+      </div>
+    </section>
+
+    <!-- Compartir ubicación -->
+    <section class="tarjeta">
+      <h2>Comparte tu ubicación con nosotros</h2>
+      <p style="font-size:.9rem;color:#7a6552;margin-bottom:16px;">
+        Si necesitas que te enviemos un pedido a domicilio o quieres que te
+        guiemos hasta nuestra puerta, pulsa el botón y acepta el permiso.
+      </p>
+
+      <button id="boton" type="button">📍 Compartir mi ubicación</button>
+
+      <div id="mensaje"></div>
+
+      <div id="resultado">
+        <div class="coordenadas">
+          <div class="dato">
+            <span>Latitud</span>
+            <strong id="lat">—</strong>
+          </div>
+          <div class="dato">
+            <span>Longitud</span>
+            <strong id="lon">—</strong>
+          </div>
+        </div>
+
+        <div class="acciones">
+          <a id="verMapa" href="#" target="_blank" rel="noopener">Ver en el mapa</a>
+          <a id="enviar" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2025 Aroma Café · Todos los derechos reservados
+  </footer>
+
+  <script>
+    // Referencias a los elementos
+    var boton     = document.getElementById("boton");
+    var mensaje   = document.getElementById("mensaje");
+    var resultado = document.getElementById("resultado");
+    var latEl     = document.getElementById("lat");
+    var lonEl     = document.getElementById("lon");
+    var verMapa   = document.getElementById("verMapa");
+    var enviar    = document.getElementById("enviar");
+
+    // Función auxiliar para mostrar mensajes
+    function mostrarMensaje(texto, tipo) {
+      mensaje.textContent = texto;
+      mensaje.className = tipo;
+    }
+
+    // Manejar el clic del botón
+    boton.onclick = function () {
+      // 1. ¿Existe la API?
+      if (!navigator.geolocation) {
+        mostrarMensaje("Tu navegador no admite la geolocalización.", "error");
+        return;
+      }
+
+      // 2. Preparar la interfaz
+      boton.disabled = true;
+      boton.textContent = "Obteniendo ubicación…";
+      resultado.className = "";
+      mostrarMensaje("Esperando tu autorización…", "info");
+
+      // 3. Pedir la posición
+      navigator.geolocation.getCurrentPosition(
+        // --- Éxito ---
+        function (pos) {
+          var lat = pos.coords.latitude;
+          var lon = pos.coords.longitude;
+
+          latEl.textContent = lat.toFixed(6);
+          lonEl.textContent = lon.toFixed(6);
+
+          var url = "https://www.google.com/maps?q=" + lat + "," + lon;
+          verMapa.href = url;
+          enviar.href = "https://wa.me/?text=" +
+            encodeURIComponent("Mi ubicación: " + url);
+
+          resultado.className = "visible";
+          mostrarMensaje("¡Ubicación obtenida correctamente!", "ok");
+
+          boton.disabled = false;
+          boton.textContent = "🔄 Actualizar ubicación";
+        },
+        // --- Error ---
+        function (err) {
+          var texto = "No se pudo obtener la ubicación.";
+          if (err.code === 1) texto = "Permiso denegado. Activa la ubicación para este sitio en tu navegador.";
+          if (err.code === 2) texto = "Ubicación no disponible. Revisa tu GPS o conexión.";
+          if (err.code === 3) texto = "Se agotó el tiempo de espera. Inténtalo de nuevo.";
+
+          mostrarMensaje(texto, "error");
+          boton.disabled = false;
+          boton.textContent = "📍 Intentar de nuevo";
+        },
+        // --- Opciones ---
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
+      );
+    };
+  </script>
+
+</body>
+</html>
